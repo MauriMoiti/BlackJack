@@ -22,5 +22,7 @@ const createDesk = () => {
     }
 
     console.log(desk);
+    desk = _.shuffle(desk);
+    console.log(desk);
 }
 createDesk();
