@@ -43,11 +43,13 @@ const getCard = () => (deckCopy.length !== 0) ? deckCopy.shift() : console.error
 const getValueCard = (card) => {
     let points = 0;
     let cardValue = card.substring(0, card.length - 1); // getValueCard(2k) --> output: 2,  getValueCard(10c) --> outout: 10, getValueCard(AC) --> output: A
-    if(isNaN(cardValue)) {
-        console.log("Isn't a number");
-    }
-    else {
-        points = Number(cardValue); // alternative --> points = cardValue * 1 // this convert to string in a number. 
-    }
-    return cardValue
+    return isNaN(cardValue) ? (cardValue === 'A' ? 11 : 10) : Number(cardValue);
+
+    // (cardValue === 'A') ? 11 : 10; in blackJack only the letter "A" with other letter, worth 11. The other letters worth 10.
+    //  Number(cardValue); alternative --> points = cardValue * 1 // this convert to string in a number. 
+    /* 
+        console.log(getValueCard('AD')) // 11
+        console.log(getValueCard('2D')) // 2
+        console.log(getValueCard('KH')) // 10
+    */
 }
