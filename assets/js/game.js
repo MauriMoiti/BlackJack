@@ -4,14 +4,17 @@
     2H = two of hearts
     2S = two of spades
  */
+// global instances
 const typeOfCards = ['C','D','H','S'];
 const specialCards = ['A','J','Q','K'];
 
 let deck = [];
 
 let playerPoints = 0;
-let cpuPoints = 0;
+let player2Points = 0;
 let turnPlayer = true;
+let stopCardsPlayer = false;
+let stopCardsPlayer2 = false;
 
 // references HTML 
 const buttonNewGame = document.querySelector('#buttonNewGame');
@@ -21,18 +24,27 @@ const buttonStopCards = document.querySelector('#buttonStopCards');
 const showPoints = document.getElementsByTagName('small');
 
 const playerCards = document.getElementById('player-cards');
-const cpuCards = document.getElementById('computer-cards');
+const player2Cards = document.getElementById('player2-cards');
 
 
 
 // Events
 buttonGetCard.addEventListener('click', () => {
-    if(turnPlayer === true) {
+    if(turnPlayer === true && stopCardsPlayer === false) {
         playerPoints = turn(0, playerCards, playerPoints);
-    } else {
-        cpuPoints = turn(1, cpuCards, cpuPoints);
+    } else if(stopCardsPlayer2 === false) {
+        player2Points = turn(1, player2Cards, player2Points);
     }
 });
+
+buttonStopCards.addEventListener('click', () => {
+    if(turnPlayer === true) {
+        stopCardsPlayer = true;
+    } else {
+        stopCardsPlayer2 = true;
+    }
+});
+
 
 // turn 
 const turn = (indexShow, containerCards, points) => {
@@ -93,10 +105,10 @@ const getValueCard = (card) => {
     */
 }
 // Card element 
-const createCard = (cardNumber, containerPlayerOrCpu) => {
+const createCard = (cardNumber, containerPlayerOrPlayer2) => {
     let card = document.createElement('img');
     card.classList.add('card');
     card.src = `assets/desk/${cardNumber}.png`;
     card.alt = `ImageOfCard:${cardNumber}`;
-    containerPlayerOrCpu.appendChild(card);
+    containerPlayerOrPlayer2.appendChild(card);
 }
