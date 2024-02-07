@@ -12,9 +12,10 @@ let deck = [];
 
 let playerPoints = 0;
 let player2Points = 0;
-let turnPlayer = true;
-let stopCardsPlayer = false;
-let stopCardsPlayer2 = false;
+let turnPlayerObj = {
+    turnPlayer1: true,
+    turnPlayer2: true
+};
 
 // references HTML 
 const buttonNewGame = document.querySelector('#buttonNewGame');
@@ -27,24 +28,29 @@ const playerCards = document.getElementById('player-cards');
 const player2Cards = document.getElementById('player2-cards');
 
 
+console.log(playerCards.childElementCount);
 
 // Events
 buttonGetCard.addEventListener('click', () => {
-    if(turnPlayer === true && stopCardsPlayer === false) {
+    if(turnPlayerObj.turnPlayer1 === true) {
         playerPoints = turn(0, playerCards, playerPoints);
-    } else if(stopCardsPlayer2 === false) {
+    } else if(turnPlayerObj.turnPlayer2 === true) {
         player2Points = turn(1, player2Cards, player2Points);
-    }
+    } 
 });
 
 buttonStopCards.addEventListener('click', () => {
-    if(turnPlayer === true) {
-        stopCardsPlayer = true;
-    } else {
-        stopCardsPlayer2 = true;
+    if(turnPlayerObj.turnPlayer1 === true && playerCards.childElementCount > 0) {
+        turnPlayerObj.turnPlayer1 = false;
+        Object.freeze(turnPlayerObj.turnPlayer1);
+    } else if(player2Cards.childElementCount > 0) {
+        turnPlayerObj.turnPlayer2 = false;
+        Object.freeze(turnPlayerObj.turnPlayer2);
     }
 });
 
+
+// functions:
 
 // turn 
 const turn = (indexShow, containerCards, points) => {
@@ -57,7 +63,7 @@ const turn = (indexShow, containerCards, points) => {
     }  else {
         buttonGetCard.disabled = true; 
     }
-    turnPlayer = !turnPlayer; 
+    turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1; 
     return points
 }
 
@@ -112,3 +118,7 @@ const createCard = (cardNumber, containerPlayerOrPlayer2) => {
     card.alt = `ImageOfCard:${cardNumber}`;
     containerPlayerOrPlayer2.appendChild(card);
 }
+
+// const winDrawLoss = (player1Points, player2Points) => {
+//     if(player1Points )
+// }
