@@ -11,6 +11,7 @@ let deck = [];
 
 let playerPoints = 0;
 let cpuPoints = 0;
+let turnPlayer = true;
 
 // references HTML 
 const buttonNewGame = document.querySelector('#buttonNewGame');
@@ -21,18 +22,32 @@ const showPoints = document.getElementsByTagName('small');
 
 const playerCards = document.getElementById('player-cards');
 const cpuCards = document.getElementById('computer-cards');
-console.log(cpuCards)
+
 
 
 // Events
 buttonGetCard.addEventListener('click', () => {
+    if(turnPlayer === true) {
+        playerPoints = turn(0, playerCards, playerPoints);
+    } else {
+        cpuPoints = turn(1, cpuCards, cpuPoints);
+    }
+});
+
+// turn 
+const turn = (indexShow, containerCards, points) => {
     let cardObtained = getCard();
     
-    playerPoints += getValueCard(cardObtained);
-    
-    showPoints[0].innerText = playerPoints;
-    createCard(cardObtained, playerCards);
-});
+    if(points < 21) {
+        points += getValueCard(cardObtained);
+        showPoints[indexShow].innerText = points;
+        createCard(cardObtained, containerCards); 
+    }  else {
+        buttonGetCard.disabled = true; 
+    }
+    turnPlayer = !turnPlayer; 
+    return points
+}
 
 // create new deck for the players
 const createDeck = () => {
@@ -80,7 +95,7 @@ const getValueCard = (card) => {
 // Card element 
 const createCard = (cardNumber, containerPlayerOrCpu) => {
     let card = document.createElement('img');
-    card.className = 'card';
+    card.classList.add('card');
     card.src = `assets/desk/${cardNumber}.png`;
     card.alt = `ImageOfCard:${cardNumber}`;
     containerPlayerOrCpu.appendChild(card);
