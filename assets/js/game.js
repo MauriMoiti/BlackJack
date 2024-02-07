@@ -19,6 +19,10 @@ const buttonStopCards = document.querySelector('#buttonStopCards');
 
 const showPoints = document.getElementsByTagName('small');
 
+const playerCards = document.getElementById('player-cards');
+const cpuCards = document.getElementById('computer-cards');
+console.log(cpuCards)
+
 
 // Events
 buttonGetCard.addEventListener('click', () => {
@@ -27,6 +31,7 @@ buttonGetCard.addEventListener('click', () => {
     playerPoints += getValueCard(cardObtained);
     
     showPoints[0].innerText = playerPoints;
+    createCard(cardObtained, playerCards);
 });
 
 // create new deck for the players
@@ -71,4 +76,12 @@ const getValueCard = (card) => {
         console.log(getValueCard('2D')) // 2
         console.log(getValueCard('KH')) // 10 
     */
+}
+// Card element 
+const createCard = (cardNumber, containerPlayerOrCpu) => {
+    let card = document.createElement('img');
+    card.className = 'card';
+    card.src = `assets/desk/${cardNumber}.png`;
+    card.alt = `ImageOfCard:${cardNumber}`;
+    containerPlayerOrCpu.appendChild(card);
 }
