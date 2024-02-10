@@ -17,6 +17,7 @@ let turnPlayerObj = {
     turnPlayer2: true
 };
 
+
 // references HTML 
 const buttonNewGame = document.querySelector('#buttonNewGame');
 const buttonGetCard = document.querySelector('#buttonGetCard');
@@ -28,16 +29,17 @@ const playerCards = document.getElementById('player-cards');
 const player2Cards = document.getElementById('player2-cards');
 
 
-console.log(playerCards.childElementCount);
 
 // Events
 buttonGetCard.addEventListener('click', () => {
     if(turnPlayerObj.turnPlayer1 === true) {
         playerPoints = turn(0, playerCards, playerPoints);
-    } else if(turnPlayerObj.turnPlayer2 === true) {
+    } else if(turnPlayerObj.turnPlayer1 !== true) {
         player2Points = turn(1, player2Cards, player2Points);
-    } 
+    }
+    console.log(turnPlayerObj.turnPlayer1)
 });
+
 
 buttonStopCards.addEventListener('click', () => {
     if(turnPlayerObj.turnPlayer1 === true && playerCards.childElementCount > 0) {
@@ -47,23 +49,25 @@ buttonStopCards.addEventListener('click', () => {
         turnPlayerObj.turnPlayer2 = false;
         Object.freeze(turnPlayerObj.turnPlayer2);
     }
+    isWin()
 });
 
 
 // functions:
 
 // turn 
-const turn = (indexShow, containerCards, points) => {
+const turn = (indexTag, containerCards, points) => {
     let cardObtained = getCard();
     
     if(points < 21) {
         points += getValueCard(cardObtained);
-        showPoints[indexShow].innerText = points;
+        showPoints[indexTag].innerText = points;
         createCard(cardObtained, containerCards); 
-    }  else {
-        buttonGetCard.disabled = true; 
-    }
+    } 
     turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1; 
+    if(points > 21) {
+        isWin()
+    }
     return points
 }
 
@@ -119,6 +123,7 @@ const createCard = (cardNumber, containerPlayerOrPlayer2) => {
     containerPlayerOrPlayer2.appendChild(card);
 }
 
-// const winDrawLoss = (player1Points, player2Points) => {
-//     if(player1Points )
-// }
+// function Win
+const isWin = () => {
+        buttonGetCard.disabled = true; 
+    } 
