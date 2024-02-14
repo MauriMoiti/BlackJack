@@ -32,44 +32,48 @@ const player2Cards = document.getElementById('player2-cards');
 
 // Events
 buttonGetCard.addEventListener('click', () => {
-    if(turnPlayerObj.turnPlayer1 === true) {
-        playerPoints = turn(0, playerCards, playerPoints);
-    } else if(turnPlayerObj.turnPlayer1 !== true) {
-        player2Points = turn(1, player2Cards, player2Points);
-    }
-    console.log(turnPlayerObj.turnPlayer1)
+    turn();
 });
 
-
 buttonStopCards.addEventListener('click', () => {
-    if(turnPlayerObj.turnPlayer1 === true && playerCards.childElementCount > 0) {
-        turnPlayerObj.turnPlayer1 = false;
-        Object.freeze(turnPlayerObj.turnPlayer1);
-    } else if(player2Cards.childElementCount > 0) {
-        turnPlayerObj.turnPlayer2 = false;
-        Object.freeze(turnPlayerObj.turnPlayer2);
-    }
-    isWin()
+    stopSturn()
 });
 
 
 // functions:
 
 // turn 
-const turn = (indexTag, containerCards, points) => {
+const turn = () => {
     let cardObtained = getCard();
-    
-    if(points < 21) {
-        points += getValueCard(cardObtained);
-        showPoints[indexTag].innerText = points;
-        createCard(cardObtained, containerCards); 
-    } 
-    turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1; 
-    if(points > 21) {
-        isWin()
+    if(turnPlayerObj.turnPlayer1 === true) {
+        playerPoints += getValueCard(cardObtained)
+        showPoints[0].innerText = playerPoints;
+        createCard(cardObtained, playerCards);
+    } else {
+        player2Points += getValueCard(cardObtained)
+        showPoints[1].innerText = player2Points;
+        createCard(cardObtained, player2Cards);
     }
-    return points
+    turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1;
+    if(player2Points > 21 || playerPoints > 21) {
+        buttonGetCard.disabled = true
+        isWin();
+    } 
 }
+const stopSturn = () => {
+    if(turnPlayerObj.turnPlayer1 === true && playerCards.childElementCount > 0) {
+        turnPlayerObj.turnPlayer1 = false;
+        Object.freeze(turnPlayerObj.turnPlayer1);
+    } else if(turnPlayerObj.turnPlayer2 === true && player2Cards.childElementCount > 0) {
+        turnPlayerObj.turnPlayer2 = false;
+        Object.freeze(turnPlayerObj.turnPlayer2);
+    }
+    if(turnPlayerObj.turnPlayer1 === false && turnPlayerObj.turnPlayer2 === false) {
+        isWin();
+    }
+}
+
+
 
 // create new deck for the players
 const createDeck = () => {
@@ -125,5 +129,17 @@ const createCard = (cardNumber, containerPlayerOrPlayer2) => {
 
 // function Win
 const isWin = () => {
-        buttonGetCard.disabled = true; 
+    setTimeout( () => {
+        if (player2Points === playerPoints && player2Points > 0 && playerPoints > 0) {
+            alert('Draw')
+        } else if(player2Points > 21 && playerPoints <= 21) {
+            alert('Player 1 Win') 
+        } else if(playerPoints > 21 && player2Points <= 21) {
+            alert('Player 2 Win');
+        } else if(playerPoints > player2Points) {
+            alert('Player 1 Win') 
+        } else {
+            alert('Player 2 Win');
+        }
+    }, 200)
     } 
