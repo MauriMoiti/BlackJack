@@ -40,13 +40,13 @@ buttonGetCard.addEventListener('click', () => {
 buttonStopCards.addEventListener('click', () => {
     if(turnPlayerObj.turnPlayer1 === true && playerCards.childElementCount > 0) {
         turnPlayerObj.turnPlayer1 = false;
-        stop1 = true
+        turnPlayerObj.stop1 = true;
     } else if(turnPlayerObj.turnPlayer2 === true && player2Cards.childElementCount > 0) {
         turnPlayerObj.turnPlayer2 = false;
-        stop2 = true
+        turnPlayerObj.stop2 = true;
     } 
 
-    if(stop1 === true && stop2 === true) {
+    if(turnPlayerObj.stop1 === true && turnPlayerObj.stop2 === true) {
         buttonGetCard.disabled = true;
         isWin();
     }
@@ -59,17 +59,16 @@ buttonStopCards.addEventListener('click', () => {
 const turn = () => {
 
     let cardObtained = getCard();
-    if(turnPlayerObj.turnPlayer1 === true || turnPlayerObj.turnPlayer2 !== true) {
+    if(turnPlayerObj.turnPlayer1 === true && turnPlayerObj.stop1 === false || turnPlayerObj.stop2 === true) {
         playerPoints += getValueCard(cardObtained)
         showPoints[0].innerText = playerPoints;
         createCard(cardObtained, playerCards);
-    turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1;
-    } else if(turnPlayerObj.turnPlayer2 === true || turnPlayerObj.turnPlayer1 !== true) {
+    } else if(turnPlayerObj.turnPlayer1 !== true && turnPlayerObj.stop2 === false || turnPlayerObj.stop1 === true) {
         player2Points += getValueCard(cardObtained)
         showPoints[1].innerText = player2Points;
         createCard(cardObtained, player2Cards);
-        turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1;
     }
+    turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1;
     if(player2Points > 21 || playerPoints > 21) {
         buttonGetCard.disabled = true
         isWin();
