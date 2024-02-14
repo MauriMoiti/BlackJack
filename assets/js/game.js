@@ -33,10 +33,10 @@ const player2Cards = document.getElementById('player2-cards');
 // Events
 buttonGetCard.addEventListener('click', () => {
     turn();
-});
+    });
 
 buttonStopCards.addEventListener('click', () => {
-    stopSturn()
+    stopTurn()
 });
 
 
@@ -45,35 +45,34 @@ buttonStopCards.addEventListener('click', () => {
 // turn 
 const turn = () => {
     let cardObtained = getCard();
-    if(turnPlayerObj.turnPlayer1 === true) {
+    if(turnPlayerObj.turnPlayer1 === true || turnPlayerObj.turnPlayer2 !== true) {
         playerPoints += getValueCard(cardObtained)
         showPoints[0].innerText = playerPoints;
         createCard(cardObtained, playerCards);
-    } else {
+    turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1;
+    } else if(turnPlayerObj.turnPlayer2 === true || turnPlayerObj.turnPlayer1 !== true) {
         player2Points += getValueCard(cardObtained)
         showPoints[1].innerText = player2Points;
         createCard(cardObtained, player2Cards);
+        turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1;
     }
-    turnPlayerObj.turnPlayer1 = !turnPlayerObj.turnPlayer1;
     if(player2Points > 21 || playerPoints > 21) {
         buttonGetCard.disabled = true
         isWin();
     } 
+    stopTurn()
 }
-const stopSturn = () => {
+
+// stop turn
+const stopTurn = () => {
     if(turnPlayerObj.turnPlayer1 === true && playerCards.childElementCount > 0) {
         turnPlayerObj.turnPlayer1 = false;
-        Object.freeze(turnPlayerObj.turnPlayer1);
+        Object.freeze(turnPlayerObj);
     } else if(turnPlayerObj.turnPlayer2 === true && player2Cards.childElementCount > 0) {
         turnPlayerObj.turnPlayer2 = false;
-        Object.freeze(turnPlayerObj.turnPlayer2);
-    }
-    if(turnPlayerObj.turnPlayer1 === false && turnPlayerObj.turnPlayer2 === false) {
-        isWin();
-    }
+        Object.freeze(turnPlayerObj);
+    } 
 }
-
-
 
 // create new deck for the players
 const createDeck = () => {
@@ -136,10 +135,6 @@ const isWin = () => {
             alert('Player 1 Win') 
         } else if(playerPoints > 21 && player2Points <= 21) {
             alert('Player 2 Win');
-        } else if(playerPoints > player2Points) {
-            alert('Player 1 Win') 
-        } else {
-            alert('Player 2 Win');
-        }
+        } 
     }, 200)
     } 
