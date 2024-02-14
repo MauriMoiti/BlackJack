@@ -14,7 +14,9 @@ let playerPoints = 0;
 let player2Points = 0;
 let turnPlayerObj = {
     turnPlayer1: true,
-    turnPlayer2: true
+    turnPlayer2: true,
+    stop1: false,
+    stop2: false
 };
 
 
@@ -36,7 +38,18 @@ buttonGetCard.addEventListener('click', () => {
     });
 
 buttonStopCards.addEventListener('click', () => {
-    stopTurn()
+    if(turnPlayerObj.turnPlayer1 === true && playerCards.childElementCount > 0) {
+        turnPlayerObj.turnPlayer1 = false;
+        stop1 = true
+    } else if(turnPlayerObj.turnPlayer2 === true && player2Cards.childElementCount > 0) {
+        turnPlayerObj.turnPlayer2 = false;
+        stop2 = true
+    } 
+
+    if(stop1 === true && stop2 === true) {
+        buttonGetCard.disabled = true;
+        isWin();
+    }
 });
 
 
@@ -44,6 +57,7 @@ buttonStopCards.addEventListener('click', () => {
 
 // turn 
 const turn = () => {
+
     let cardObtained = getCard();
     if(turnPlayerObj.turnPlayer1 === true || turnPlayerObj.turnPlayer2 !== true) {
         playerPoints += getValueCard(cardObtained)
@@ -65,13 +79,7 @@ const turn = () => {
 
 // stop turn
 const stopTurn = () => {
-    if(turnPlayerObj.turnPlayer1 === true && playerCards.childElementCount > 0) {
-        turnPlayerObj.turnPlayer1 = false;
-        Object.freeze(turnPlayerObj);
-    } else if(turnPlayerObj.turnPlayer2 === true && player2Cards.childElementCount > 0) {
-        turnPlayerObj.turnPlayer2 = false;
-        Object.freeze(turnPlayerObj);
-    } 
+
 }
 
 // create new deck for the players
@@ -135,6 +143,10 @@ const isWin = () => {
             alert('Player 1 Win') 
         } else if(playerPoints > 21 && player2Points <= 21) {
             alert('Player 2 Win');
-        } 
+        } else if(playerPoints >  player2Points) {
+            alert('Player 1 Win') 
+        } else {
+            alert('Player 2 Win') 
+        }
     }, 200)
     } 
