@@ -1,5 +1,5 @@
-// (() => {
-//     'use strict';
+(() => {
+    'use strict'
     /*
         2C = two of clubs
         2D = two of diamonds
@@ -238,4 +238,4 @@
                 buttonGetCard.disabled = false
             )
         }
-// })();
+})();
